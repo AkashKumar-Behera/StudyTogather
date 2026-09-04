@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "373326963708",
+    "firebase_url": "https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "webrtc-cd5af",
+    "storage_bucket": "webrtc-cd5af.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373326963708:android:4637135da94a0a3efe4879",
+        "android_client_info": {
+          "package_name": "com.example.studytogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373326963708-b5uac2d46dqm2eqa1114rqv0p07mnheo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAawUTO44Dr7h2uJ_XU3hfBmtjfm93rsCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373326963708-b5uac2d46dqm2eqa1114rqv0p07mnheo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

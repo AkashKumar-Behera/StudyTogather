@@ -26,38 +26,46 @@ class DefaultFirebaseOptions {
 
   // Configurations placeholder. You can update these with your Firebase Console Project credentials
   // or use `flutterfire configure` to overwrite this file automatically.
+
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDemoPlaceholderApiKeyWebXXXXXXXX',
-    appId: '1:100000000000:web:abcdef1234567890',
-    messagingSenderId: '100000000000',
-    projectId: 'studytogether-demo',
-    authDomain: 'studytogether-demo.firebaseapp.com',
-    storageBucket: 'studytogether-demo.appspot.com',
+    apiKey: 'AIzaSyBGnFw13ko0b4KAs7plpFmHlg0GohowElA',
+    appId: '1:373326963708:web:a53bef73c7f3b6bffe4879',
+    messagingSenderId: '373326963708',
+    projectId: 'webrtc-cd5af',
+    authDomain: 'webrtc-cd5af.firebaseapp.com',
+    databaseURL: 'https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'webrtc-cd5af.firebasestorage.app',
+    measurementId: 'G-HSNTF46M1B',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDemoPlaceholderApiKeyAndroidXXXXX',
-    appId: '1:100000000000:android:abcdef1234567890',
-    messagingSenderId: '100000000000',
-    projectId: 'studytogether-demo',
-    storageBucket: 'studytogether-demo.appspot.com',
+    apiKey: 'AIzaSyAawUTO44Dr7h2uJ_XU3hfBmtjfm93rsCY',
+    appId: '1:373326963708:android:4637135da94a0a3efe4879',
+    messagingSenderId: '373326963708',
+    projectId: 'webrtc-cd5af',
+    databaseURL: 'https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'webrtc-cd5af.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDemoPlaceholderApiKeyIosXXXXXXXXX',
-    appId: '1:100000000000:ios:abcdef1234567890',
-    messagingSenderId: '100000000000',
-    projectId: 'studytogether-demo',
-    storageBucket: 'studytogether-demo.appspot.com',
+    apiKey: 'AIzaSyAhJAzD7-8pSlKSYLNFuPG0FJ95VnT6sCk',
+    appId: '1:373326963708:ios:90326e00d2a1eca2fe4879',
+    messagingSenderId: '373326963708',
+    projectId: 'webrtc-cd5af',
+    databaseURL: 'https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'webrtc-cd5af.firebasestorage.app',
+    androidClientId: '373326963708-4ca7rccl7s0k7ioo4mqg9tadv3edvjab.apps.googleusercontent.com',
+    iosClientId: '373326963708-ga15ak9so4m8ls3su0b2ehme7rlpc82f.apps.googleusercontent.com',
     iosBundleId: 'com.example.studytogether',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDemoPlaceholderApiKeyWindowsXXXXX',
-    appId: '1:100000000000:web:abcdef1234567890',
-    messagingSenderId: '100000000000',
-    projectId: 'studytogether-demo',
-    authDomain: 'studytogether-demo.firebaseapp.com',
-    storageBucket: 'studytogether-demo.appspot.com',
+    apiKey: 'AIzaSyBGnFw13ko0b4KAs7plpFmHlg0GohowElA',
+    appId: '1:373326963708:web:45a90fd3054b51a8fe4879',
+    messagingSenderId: '373326963708',
+    projectId: 'webrtc-cd5af',
+    authDomain: 'webrtc-cd5af.firebaseapp.com',
+    databaseURL: 'https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'webrtc-cd5af.firebasestorage.app',
+    measurementId: 'G-CFLRDJB1FF',
   );
 }
