@@ -35,8 +35,15 @@ class AuthService extends ChangeNotifier {
   Future<void> fetchUserProfile() async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) {
-      _userProfile = null;
-      notifyListeners();
+      if (_userProfile != null) {
+        _userProfile = null;
+        notifyListeners();
+      }
+      return;
+    }
+
+    // Skip redundant fetch if already cached for this uid
+    if (_userProfile != null && _userProfile!.uid == uid) {
       return;
     }
 
