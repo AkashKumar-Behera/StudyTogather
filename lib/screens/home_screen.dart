@@ -1,11 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../services/auth_service.dart';
+import '../services/update_service.dart';
 import '../theme/app_theme.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  ReleaseInfo? _latestRelease;
+  bool _isCheckingUpdate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkForUpdatesSilently();
+  }
+
+  Future<void> _checkForUpdatesSilently() async {
+    final release = await UpdateService.checkForUpdate();
+    if (release != null && mounted) {
+      setState(() {
+        _latestRelease = release;
+      });
+      // Show auto-popup when an update is found
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          UpdateService.showUpdateDialog(context, release);
+        }
+      });
+    }
+  }
+
+  Future<void> _checkUpdateManually() async {
+    setState(() => _isCheckingUpdate = true);
+    final release = await UpdateService.checkForUpdate();
+    setState(() => _isCheckingUpdate = false);
+
+    if (release != null && mounted) {
+      UpdateService.showUpdateDialog(context, release);
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'You are on the latest version!',
+            style: GoogleFonts.inter(color: Colors.white),
+          ),
+          backgroundColor: AppColors.success,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +94,21 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         actions: [
+          // In-App update check button
+          IconButton(
+            tooltip: 'Check for Updates',
+            icon: _isCheckingUpdate
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                  )
+                : Icon(
+                    _latestRelease != null ? Icons.system_update_rounded : Icons.sync_rounded,
+                    color: _latestRelease != null ? AppColors.accent : AppColors.textSecondary,
+                  ),
+            onPressed: _isCheckingUpdate ? null : _checkUpdateManually,
+          ),
           IconButton(
             tooltip: 'Sign Out',
             icon: const Icon(Icons.logout_rounded, color: AppColors.textSecondary),
@@ -92,6 +159,58 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // In-App Update Banner if update is available
+                if (_latestRelease != null) ...[
+                  Container(
+                    margin: const EdgeInsets.bottom: 24,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary.withOpacity(0.2), AppColors.accent.withOpacity(0.1)],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.new_releases_rounded, color: AppColors.accent, size: 28),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Update ${_latestRelease!.tagName} available',
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                              Text(
+                                'New features and bug fixes ready for download.',
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            textStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () => UpdateService.showUpdateDialog(context, _latestRelease!),
+                          child: const Text('Download'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+
                 // Animated glowing avatar
                 Container(
                   width: 100,
@@ -159,40 +278,122 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
 
-                // Empty dashboard placeholder card
+                // Platforms & Downloads Section Card
                 Container(
-                  padding: const EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: AppColors.border),
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.auto_awesome_rounded,
-                        size: 40,
-                        color: AppColors.primary.withOpacity(0.8),
+                      Row(
+                        children: [
+                          const Icon(Icons.cloud_download_rounded, color: AppColors.primary, size: 22),
+                          const SizedBox(width: 10),
+                          Text(
+                            'App Downloads & Platforms',
+                            style: GoogleFonts.outfit(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Text(
+                        'Download the latest binaries for Android and access other platform versions from GitHub Releases.',
+                        style: GoogleFonts.inter(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        'Your study space is ready!',
-                        style: GoogleFonts.outfit(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.textPrimary,
+                              side: const BorderSide(color: AppColors.border),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            icon: const Icon(Icons.android_rounded, color: AppColors.success, size: 18),
+                            label: const Text('Download APK'),
+                            onPressed: () async {
+                              final url = _latestRelease?.apkDownloadUrl ??
+                                  'https://github.com/AkashKumar-Behera/StudyTogather/releases/latest';
+                              final uri = Uri.parse(url);
+                              if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
+                            },
+                          ),
+                          OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.textPrimary,
+                              side: const BorderSide(color: AppColors.border),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            icon: const Icon(Icons.inventory_2_outlined, color: AppColors.accent, size: 18),
+                            label: const Text('App Bundle (AAB)'),
+                            onPressed: () async {
+                              final url = _latestRelease?.aabDownloadUrl ??
+                                  'https://github.com/AkashKumar-Behera/StudyTogather/releases/latest';
+                              final uri = Uri.parse(url);
+                              if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
+                            },
+                          ),
+                          OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.textPrimary,
+                              side: const BorderSide(color: AppColors.border),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            icon: const Icon(Icons.open_in_browser_rounded, color: AppColors.secondary, size: 18),
+                            label: const Text('All Releases'),
+                            onPressed: () async {
+                              final uri = Uri.parse('https://github.com/AkashKumar-Behera/StudyTogather/releases');
+                              if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
+                            },
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'This is your empty home dashboard. Cross-platform authentication is active and working seamlessly across Android, iOS, Windows & Web.',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: AppColors.textSecondary,
-                          height: 1.5,
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Web Hosting & Status info
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.language_rounded, color: AppColors.accent, size: 24),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Firebase Web Hosting Active',
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              'Web builds automatically deploy to Firebase Hosting on release tags.',
+                              style: GoogleFonts.inter(fontSize: 12, color: AppColors.textSecondary),
+                            ),
+                          ],
                         ),
                       ),
                     ],

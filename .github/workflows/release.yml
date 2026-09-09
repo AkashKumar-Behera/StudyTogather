@@ -13,11 +13,10 @@ on:
 
 jobs:
   build-and-release:
-    name: Build Multiplatform Release Artifacts
+    name: Build Release Artifacts & Deploy
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pages: write
       id-token: write
 
     steps:
@@ -39,24 +38,27 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      # 1. Build Web App
       - name: Build Web App
         run: flutter build web --release
 
+      # 2. Deploy to Firebase Hosting
+      - name: Deploy Web to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WEBRTC_CD5AF }}'
+          channelId: live
+          projectId: webrtc-cd5af
+
+      # 3. Build Android APK & App Bundle
       - name: Build Android APK
         run: flutter build apk --release
 
       - name: Build Android App Bundle (AAB)
         run: flutter build appbundle --release
 
-      - name: Upload Web Build to GitHub Pages (Deploy)
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/web
-
-      - name: Deploy Web to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
+      # 4. Create GitHub Release with direct download links
       - name: Create GitHub Release with APK & App Bundle
         uses: softprops/action-gh-release@v2
         with:
