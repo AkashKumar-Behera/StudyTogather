@@ -1,5 +1,7 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
@@ -19,6 +21,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
 
+  Uint8List? _selectedImageBytes;
+  String? _selectedImageExtension;
+  final ImagePicker _picker = ImagePicker();
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -26,6 +32,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final XFile? file = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 85,
+      );
+
+      if (file != null) {
+        final bytes = await file.readAsBytes();
+        final ext = file.name.split('.').last.toLowerCase();
+        setState(() {
+          _selectedImageBytes = bytes;
+          _selectedImageExtension = ext.isEmpty ? 'jpg' : ext;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
+    }
   }
 
   Future<void> _handleRegister() async {
@@ -36,10 +64,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       email: _emailController.text,
       password: _passwordController.text,
       displayName: _nameController.text,
+      imageBytes: _selectedImageBytes,
+      imageExtension: _selectedImageExtension,
     );
 
     if (success && mounted) {
-      Navigator.of(context).pop(); // Back to AuthGate which automatically navigates to HomeScreen
+      Navigator.of(context).pop();
     } else if (!success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -107,7 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: AppColors.textPrimary,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
                         'Join StudyTogether and connect across any platform',
                         textAlign: TextAlign.center,
@@ -116,7 +146,67 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: AppColors.textSecondary,
                         ),
                       ),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 24),
+
+                      // Profile Avatar Picker
+                      Center(
+                        child: Stack(
+                          children: [
+                            GestureDetector(
+                              onTap: _pickImage,
+                              child: Container(
+                                width: 90,
+                                height: 90,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.background,
+                                  border: Border.all(color: AppColors.primary, width: 2),
+                                  image: _selectedImageBytes != null
+                                      ? DecorationImage(
+                                          image: MemoryImage(_selectedImageBytes!),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
+                                ),
+                                child: _selectedImageBytes == null
+                                    ? const Icon(
+                                        Icons.person_outline_rounded,
+                                        size: 42,
+                                        color: AppColors.textSecondary,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: _pickImage,
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primary,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.camera_alt_rounded,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Center(
+                        child: Text(
+                          _selectedImageBytes != null ? 'Photo selected' : 'Add profile picture',
+                          style: GoogleFonts.inter(fontSize: 12, color: AppColors.textSecondary),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
 
                       // Full Name
                       Text(
@@ -151,6 +241,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             borderSide: const BorderSide(color: AppColors.primary, width: 2),
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Please enter your name';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 18),
 

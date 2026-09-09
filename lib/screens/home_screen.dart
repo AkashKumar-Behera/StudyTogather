@@ -20,6 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthService>().fetchUserProfile();
+    });
     _checkForUpdatesSilently();
   }
 
@@ -63,7 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final authService = context.watch<AuthService>();
     final user = authService.currentUser;
-    final displayName = user?.displayName ?? (user?.email?.split('@').first ?? 'Friend');
+    final profile = authService.userProfile;
+    final displayName = profile?.displayName.isNotEmpty == true
+        ? profile!.displayName
+        : (user?.displayName ?? (user?.email?.split('@').first ?? 'Friend'));
+    final photoUrl = profile?.photoUrl ?? user?.photoURL;
+    final userEmail = profile?.email ?? (user?.email ?? '');
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -211,34 +219,56 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
 
-                // Animated glowing avatar
+                // Animated glowing avatar / Profile Picture
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 104,
+                  height: 104,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [AppColors.primary, AppColors.accent],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    gradient: photoUrl == null
+                        ? const LinearGradient(
+                            colors: [AppColors.primary, AppColors.accent],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    border: Border.all(color: AppColors.primary, width: 3),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.35),
-                        blurRadius: 30,
-                        spreadRadius: 4,
+                        color: AppColors.primary.withOpacity(0.4),
+                        blurRadius: 28,
+                        spreadRadius: 3,
                       ),
                     ],
                   ),
-                  child: Center(
-                    child: Text(
-                      displayName.isNotEmpty ? displayName[0].toUpperCase() : 'U',
-                      style: GoogleFonts.outfit(
-                        fontSize: 42,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                  child: ClipOval(
+                    child: photoUrl != null && photoUrl.isNotEmpty
+                        ? Image.network(
+                            photoUrl,
+                            fit: BoxFit.cover,
+                            width: 104,
+                            height: 104,
+                            errorBuilder: (_, __, ___) => Center(
+                              child: Text(
+                                displayName.isNotEmpty ? displayName[0].toUpperCase() : 'U',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 42,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              displayName.isNotEmpty ? displayName[0].toUpperCase() : 'U',
+                              style: GoogleFonts.outfit(
+                                fontSize: 42,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -269,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 16),
                       const SizedBox(width: 8),
                       Text(
-                        user?.email ?? 'Logged In',
+                        userEmail.isNotEmpty ? userEmail : 'Logged In',
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           color: AppColors.textSecondary,
