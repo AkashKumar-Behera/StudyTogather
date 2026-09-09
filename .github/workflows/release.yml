@@ -47,10 +47,10 @@ jobs:
 
       # 2. Deploy Web App to Firebase Hosting
       - name: Deploy to Firebase Hosting
+        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_WEBRTC_CD5AF != '' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
-        continue-on-error: true # Continues even if service account secret is not yet set
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          repoToken: '${{ github.token }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WEBRTC_CD5AF }}'
           channelId: live
           projectId: webrtc-cd5af
