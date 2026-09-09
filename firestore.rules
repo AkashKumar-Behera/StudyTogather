@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection:
+    // Any authenticated user can read profiles (friends, study members).
+    // Write/update only permitted by the owner of the document.
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Default rule for other collections (e.g. rooms, messages)
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

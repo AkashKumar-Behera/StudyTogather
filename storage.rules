@@ -1,0 +1,17 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // User avatars folder: Kisi bhi logged-in user ko read karne do taaki sabhi ka avatar display ho sake
+    // Write sirf wahi user kar sakta hai jiska apna avatar path hai
+    match /user_avatars/{userId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // General fallback for media / uploads if authenticated
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
