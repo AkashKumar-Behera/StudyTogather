@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fit: BoxFit.cover,
                             width: 104,
                             height: 104,
-                            errorBuilder: (_, __, ___) => Center(
+                            errorBuilder: (context, error, stackTrace) => Center(
                               child: Text(
                                 displayName.isNotEmpty ? displayName[0].toUpperCase() : 'U',
                                 style: GoogleFonts.outfit(
