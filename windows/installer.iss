@@ -14,6 +14,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
+SourceDir=..
 OutputDir=build\windows\installer
 OutputBaseFilename=StudyTogether-windows-installer
 Compression=lzma
