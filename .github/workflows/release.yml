@@ -136,7 +136,13 @@ jobs:
 
       - name: Compile Inno Setup Script into Single EXE Installer
         run: |
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" windows/installer.iss
+          $isccPath = Get-ChildItem -Path "C:\Program Files*", "C:\ProgramData\chocolatey\bin" -Filter "ISCC.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+          if (-not $isccPath) {
+            $isccPath = (Get-Command iscc.exe -ErrorAction SilentlyContinue).Source
+          }
+          Write-Host "Found ISCC at: $isccPath"
+          New-Item -ItemType Directory -Force -Path "build\windows\installer"
+          & "$isccPath" windows/installer.iss
           Copy-Item build\windows\installer\StudyTogether-windows-installer.exe StudyTogether-windows-setup.exe
         shell: powershell
 
