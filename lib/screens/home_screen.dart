@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // In-App Update Banner if update is available
                 if (_latestRelease != null) ...[
                   Container(
-                    margin: const EdgeInsets.bottom: 24,
+                    margin: const EdgeInsets.only(bottom: 24),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
