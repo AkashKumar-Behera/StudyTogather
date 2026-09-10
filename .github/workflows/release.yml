@@ -131,14 +131,22 @@ jobs:
         run: flutter build windows --release
 
       - name: Install Inno Setup
-        run: choco install innosetup --yes
+        run: choco install innosetup --yes --no-progress
         shell: powershell
 
       - name: Compile Inno Setup Script into Single EXE Installer
         run: |
-          $isccPath = Get-ChildItem -Path "C:\Program Files*", "C:\ProgramData\chocolatey\bin" -Filter "ISCC.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+          $candidatePaths = @(
+            "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
+            "C:\Program Files\Inno Setup 6\ISCC.exe",
+            "C:\ProgramData\chocolatey\bin\iscc.exe"
+          )
+          $isccPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
           if (-not $isccPath) {
             $isccPath = (Get-Command iscc.exe -ErrorAction SilentlyContinue).Source
+          }
+          if (-not $isccPath) {
+            throw "ISCC.exe not found! Please check Inno Setup installation."
           }
           Write-Host "Found ISCC at: $isccPath"
           New-Item -ItemType Directory -Force -Path "build\windows\installer"
