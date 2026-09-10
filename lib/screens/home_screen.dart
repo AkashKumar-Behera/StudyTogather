@@ -357,12 +357,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             icon: const Icon(Icons.android_rounded, color: AppColors.success, size: 18),
                             label: const Text('Download APK'),
-                            onPressed: () async {
-                              final url = _latestRelease?.apkDownloadUrl ??
-                                  'https://github.com/AkashKumar-Behera/StudyTogather/releases/latest';
-                              final uri = Uri.parse(url);
-                              if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
-                            },
+                            onPressed: () => _safeLaunchUrl(
+                              context,
+                              _latestRelease?.apkDownloadUrl ??
+                                  'https://github.com/AkashKumar-Behera/StudyTogather/releases/latest',
+                            ),
                           ),
                           OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
@@ -372,12 +371,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             icon: const Icon(Icons.inventory_2_outlined, color: AppColors.accent, size: 18),
                             label: const Text('App Bundle (AAB)'),
-                            onPressed: () async {
-                              final url = _latestRelease?.aabDownloadUrl ??
-                                  'https://github.com/AkashKumar-Behera/StudyTogather/releases/latest';
-                              final uri = Uri.parse(url);
-                              if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
-                            },
+                            onPressed: () => _safeLaunchUrl(
+                              context,
+                              _latestRelease?.aabDownloadUrl ??
+                                  'https://github.com/AkashKumar-Behera/StudyTogather/releases/latest',
+                            ),
                           ),
                           OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
@@ -387,10 +385,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             icon: const Icon(Icons.open_in_browser_rounded, color: AppColors.secondary, size: 18),
                             label: const Text('All Releases'),
-                            onPressed: () async {
-                              final uri = Uri.parse('https://github.com/AkashKumar-Behera/StudyTogather/releases');
-                              if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
-                            },
+                            onPressed: () => _safeLaunchUrl(
+                              context,
+                              'https://github.com/AkashKumar-Behera/StudyTogather/releases',
+                            ),
                           ),
                         ],
                       ),
@@ -439,5 +437,25 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void _safeLaunchUrl(BuildContext context, String urlString) async {
+    try {
+      final uri = Uri.parse(urlString);
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+    } catch (e) {
+      debugPrint('Failed to launch URL: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open browser: $urlString'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 }

@@ -184,10 +184,7 @@ class UpdateService {
                   leading: const Icon(Icons.android_rounded, color: AppColors.success),
                   title: Text('Download Android APK', style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 13)),
                   trailing: const Icon(Icons.download_rounded, color: AppColors.primary, size: 20),
-                  onTap: () async {
-                    final uri = Uri.parse(release.apkDownloadUrl!);
-                    if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
-                  },
+                  onTap: () => _safeLaunch(context, release.apkDownloadUrl!),
                 ),
               if (release.aabDownloadUrl != null)
                 ListTile(
@@ -196,10 +193,7 @@ class UpdateService {
                   leading: const Icon(Icons.inventory_2_outlined, color: AppColors.accent),
                   title: Text('Download App Bundle (AAB)', style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 13)),
                   trailing: const Icon(Icons.download_rounded, color: AppColors.primary, size: 20),
-                  onTap: () async {
-                    final uri = Uri.parse(release.aabDownloadUrl!);
-                    if (await canLaunchUrl(uri)) launchUrl(uri, mode: LaunchMode.externalApplication);
-                  },
+                  onTap: () => _safeLaunch(context, release.aabDownloadUrl!),
                 ),
             ],
           ),
@@ -216,16 +210,35 @@ class UpdateService {
               ),
               icon: const Icon(Icons.open_in_browser_rounded, size: 18),
               label: Text('View Release', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-              onPressed: () async {
-                final uri = Uri.parse(release.htmlUrl);
-                if (await canLaunchUrl(uri)) {
-                  launchUrl(uri, mode: LaunchMode.externalApplication);
-                }
-              },
+              onPressed: () => _safeLaunch(context, release.htmlUrl),
             ),
           ],
         );
       },
     );
+  }
+
+  static Future<void> _safeLaunch(BuildContext context, String urlString) async {
+    try {
+      final uri = Uri.parse(urlString);
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        // Fallback to platform default
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+    } catch (e) {
+      debugPrint('Could not launch url: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open browser: $urlString'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 }
