@@ -40,7 +40,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAawUTO44Dr7h2uJ_XU3hfBmtjfm93rsCY',
-    appId: '1:373326963708:android:4637135da94a0a3efe4879',
+    appId: '1:373326963708:android:6cf9d042a4212cf5fe4879',
     messagingSenderId: '373326963708',
     projectId: 'webrtc-cd5af',
     databaseURL: 'https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -48,14 +48,14 @@ class DefaultFirebaseOptions {
   );
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAhJAzD7-8pSlKSYLNFuPG0FJ95VnT6sCk',
-    appId: '1:373326963708:ios:90326e00d2a1eca2fe4879',
+    appId: '1:373326963708:ios:a3bff6a173fc709ffe4879',
     messagingSenderId: '373326963708',
     projectId: 'webrtc-cd5af',
     databaseURL: 'https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'webrtc-cd5af.firebasestorage.app',
     androidClientId: '373326963708-4ca7rccl7s0k7ioo4mqg9tadv3edvjab.apps.googleusercontent.com',
-    iosClientId: '373326963708-ga15ak9so4m8ls3su0b2ehme7rlpc82f.apps.googleusercontent.com',
-    iosBundleId: 'com.example.studytogether',
+    iosClientId: '373326963708-oi7riv05nnm9lndko94h17a08ubd7u22.apps.googleusercontent.com',
+    iosBundleId: 'com.mind.flow',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

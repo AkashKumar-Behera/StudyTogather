@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "studytogether" "\0"
+            VALUE "CompanyName", "com.mind.flow" "\0"
+            VALUE "FileDescription", "Mind Flow" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "studytogether" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "studytogether.exe" "\0"
-            VALUE "ProductName", "studytogether" "\0"
+            VALUE "InternalName", "mindflow" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 Mind Flow. All rights reserved." "\0"
+            VALUE "OriginalFilename", "mindflow.exe" "\0"
+            VALUE "ProductName", "Mind Flow" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

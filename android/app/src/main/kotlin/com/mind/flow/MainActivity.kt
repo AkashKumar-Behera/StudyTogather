@@ -1,4 +1,4 @@
-package com.example.studytogether
+package com.mind.flow
 
 import io.flutter.embedding.android.FlutterActivity
 

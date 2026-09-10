@@ -197,7 +197,8 @@ class AuthService extends ChangeNotifier {
       case 'user-not-found':
         return 'No account found with this email address.';
       case 'wrong-password':
-        return 'Incorrect password. Please verify and try again.';
+      case 'invalid-credential':
+        return 'Invalid email or password. Please verify and try again.';
       case 'email-already-in-use':
         return 'An account already exists with this email address.';
       case 'invalid-email':
