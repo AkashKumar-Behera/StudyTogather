@@ -85,50 +85,49 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Header Icon & Title
+                      // MindFlow Brand Logo
                       Center(
                         child: Container(
-                          width: 68,
-                          height: 68,
+                          width: 88,
+                          height: 88,
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [AppColors.primary, AppColors.secondary],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(22),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primary.withOpacity(0.35),
-                                blurRadius: 16,
-                                offset: const Offset(0, 6),
+                                color: AppColors.primary.withOpacity(0.4),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
                               ),
                             ],
                           ),
-                          child: const Icon(
-                            Icons.group_rounded,
-                            size: 36,
-                            color: Colors.white,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(22),
+                            child: Image.asset(
+                              'assets/icons/app_icon_1024.png',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 20),
                       Text(
-                        'Welcome Back',
+                        'MindFlow',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.outfit(
-                          fontSize: 28,
+                          fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
+                          letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
-                        'Sign in to join your study rooms and friends',
+                        'Study Together, Further',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
+                          color: AppColors.primaryLight,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 32),

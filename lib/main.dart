@@ -19,11 +19,11 @@ void main() async {
     debugPrint('Firebase initialization note: $e');
   }
 
-  runApp(const StudyTogetherApp());
+  runApp(const MindFlowApp());
 }
 
-class StudyTogetherApp extends StatelessWidget {
-  const StudyTogetherApp({super.key});
+class MindFlowApp extends StatelessWidget {
+  const MindFlowApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class StudyTogetherApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
       ],
       child: MaterialApp(
-        title: 'StudyTogether',
+        title: 'MindFlow',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,

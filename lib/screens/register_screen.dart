@@ -139,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Join StudyTogether and connect across any platform',
+                        'Join MindFlow and connect across any platform',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(
                           fontSize: 14,

@@ -4,6 +4,6 @@ import 'package:studytogether/main.dart';
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
     // Verifies app widget instantiates
-    expect(const StudyTogetherApp(), isNotNull);
+    expect(const MindFlowApp(), isNotNull);
   });
 }

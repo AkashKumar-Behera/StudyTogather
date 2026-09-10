@@ -81,18 +81,22 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.secondary],
-                ),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.school_rounded, color: Colors.white, size: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  'assets/icons/app_icon_1024.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(width: 12),
             Text(
-              'StudyTogether',
+              'MindFlow',
               style: GoogleFonts.outfit(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
