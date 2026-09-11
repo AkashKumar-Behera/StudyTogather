@@ -3,13 +3,10 @@
 
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+    show defaultTargetPlatform, TargetPlatform;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    if (kIsWeb) {
-      return web;
-    }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
@@ -23,20 +20,6 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
-  // Configurations placeholder. You can update these with your Firebase Console Project credentials
-  // or use `flutterfire configure` to overwrite this file automatically.
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBGnFw13ko0b4KAs7plpFmHlg0GohowElA',
-    appId: '1:373326963708:web:a53bef73c7f3b6bffe4879',
-    messagingSenderId: '373326963708',
-    projectId: 'webrtc-cd5af',
-    authDomain: 'webrtc-cd5af.firebaseapp.com',
-    databaseURL: 'https://webrtc-cd5af-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'webrtc-cd5af.firebasestorage.app',
-    measurementId: 'G-HSNTF46M1B',
-  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAawUTO44Dr7h2uJ_XU3hfBmtjfm93rsCY',

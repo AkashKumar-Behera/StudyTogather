@@ -1,18 +1,4 @@
 {
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  },
   "firestore": {
     "rules": "firestore.rules"
   },
@@ -24,7 +10,7 @@
       "android": {
         "default": {
           "projectId": "webrtc-cd5af",
-          "appId": "1:373326963708:android:4637135da94a0a3efe4879",
+          "appId": "1:373326963708:android:6cf9d042a4212cf5fe4879",
           "fileOutput": "android/app/google-services.json"
         }
       },
@@ -32,9 +18,8 @@
         "lib/firebase_options.dart": {
           "projectId": "webrtc-cd5af",
           "configurations": {
-            "android": "1:373326963708:android:4637135da94a0a3efe4879",
-            "ios": "1:373326963708:ios:90326e00d2a1eca2fe4879",
-            "web": "1:373326963708:web:a53bef73c7f3b6bffe4879",
+            "android": "1:373326963708:android:6cf9d042a4212cf5fe4879",
+            "ios": "1:373326963708:ios:a3bff6a173fc709ffe4879",
             "windows": "1:373326963708:web:45a90fd3054b51a8fe4879"
           }
         }

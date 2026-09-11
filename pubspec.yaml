@@ -44,6 +44,12 @@ dependencies:
   cloud_firestore: ^6.9.0
   firebase_storage: ^13.5.0
   image_picker: ^1.2.3
+  just_audio: ^0.9.46
+  audio_video_progress_bar: ^2.0.3
+  youtube_explode_dart:
+    git:
+      url: https://github.com/AkashKumar-Behera/youtube_explode_dart.git
+      ref: master
 
 dev_dependencies:
   flutter_test:
@@ -64,11 +70,6 @@ flutter_launcher_icons:
   min_sdk_android: 21
   adaptive_icon_background: "#090B14"
   adaptive_icon_foreground: "assets/icons/android_foreground.png"
-  web:
-    generate: true
-    image_path: "assets/icons/app_icon_1024.png"
-    background_color: "#0B0D17"
-    theme_color: "#7B61FF"
   windows:
     generate: true
     image_path: "assets/icons/app_icon_1024.png"

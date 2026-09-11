@@ -13,14 +13,13 @@ on:
 
 jobs:
   # ----------------------------------------------------
-  # Job 1: Build Android APK (Obfuscated) & Deploy Web to Firebase
+  # Job 1: Build Android APK (Obfuscated)
   # ----------------------------------------------------
-  build-android-and-web:
-    name: Build Android APK & Deploy Web
+  build-android:
+    name: Build Android APK
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
 
     steps:
       - name: Checkout Code
@@ -41,23 +40,7 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      # 1. Build Web App
-      - name: Build Web App
-        run: flutter build web --release
-
-      # 2. Deploy Web App to Firebase Hosting
-      - name: Deploy to Firebase Hosting
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_WEBRTC_CD5AF }}
-        if: env.FIREBASE_SERVICE_ACCOUNT != ''
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ github.token }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WEBRTC_CD5AF }}'
-          channelId: live
-          projectId: webrtc-cd5af
-
-      # 3. Build Obfuscated Android APK (Compatible with all devices, minSdk 21)
+      # Build Obfuscated Android APK (Compatible with all devices, minSdk 21)
       - name: Build Obfuscated Android APK
         run: flutter build apk --release --obfuscate --split-debug-info=build/app/outputs/symbols
 
@@ -165,7 +148,7 @@ jobs:
   # ----------------------------------------------------
   publish-release:
     name: Publish GitHub Release
-    needs: [build-android-and-web, build-ios-ipa, build-windows-exe]
+    needs: [build-android, build-ios-ipa, build-windows-exe]
     runs-on: ubuntu-latest
     permissions:
       contents: write

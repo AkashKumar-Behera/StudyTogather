@@ -397,7 +397,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // Web Hosting & Status info
+                // Native Cross-Platform Status info
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -407,14 +407,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.language_rounded, color: AppColors.accent, size: 24),
+                      const Icon(Icons.devices_rounded, color: AppColors.accent, size: 24),
                       const SizedBox(width: 14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Firebase Web Hosting Active',
+                              'MindFlow Native Ecosystem',
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
@@ -422,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              'Web builds automatically deploy to Firebase Hosting on release tags.',
+                              'Optimized for high-performance audio, voice & video on Android, iOS & Windows.',
                               style: GoogleFonts.inter(fontSize: 12, color: AppColors.textSecondary),
                             ),
                           ],
